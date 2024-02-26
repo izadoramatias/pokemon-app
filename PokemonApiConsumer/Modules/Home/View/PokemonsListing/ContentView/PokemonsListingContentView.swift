@@ -18,7 +18,7 @@ class PokemonsListingContentView: UIView {
     var screenLoader: PokemonsLoaderIndicatorView = {
         let loader = PokemonsLoaderIndicatorView()
         loader.translatesAutoresizingMaskIntoConstraints = false
-
+        
         return loader
     }()
     
@@ -39,15 +39,16 @@ class PokemonsListingContentView: UIView {
         self.addSubview(pokemonTableView)
         self.addSubview(screenLoader)
                 
+        let safeAreaMargins = self.safeAreaLayoutGuide
         NSLayoutConstraint.activate([
-            pokemonTableView.topAnchor.constraint(equalTo: self.topAnchor),
-            pokemonTableView.bottomAnchor.constraint(equalTo: self.bottomAnchor),
-            pokemonTableView.leadingAnchor.constraint(equalTo: self.leadingAnchor),
-            pokemonTableView.trailingAnchor.constraint(equalTo: self.trailingAnchor),
+            pokemonTableView.topAnchor.constraint(equalTo: safeAreaMargins.topAnchor),
+            pokemonTableView.bottomAnchor.constraint(equalTo: safeAreaMargins.bottomAnchor),
+            pokemonTableView.leadingAnchor.constraint(equalTo: safeAreaMargins.leadingAnchor),
+            pokemonTableView.trailingAnchor.constraint(equalTo: safeAreaMargins.trailingAnchor),
             
-            screenLoader.trailingAnchor.constraint(equalTo: self.trailingAnchor),
-            screenLoader.leadingAnchor.constraint(equalTo: self.leadingAnchor),
-            screenLoader.topAnchor.constraint(equalTo: pokemonTableView.bottomAnchor, constant: -15)
+            screenLoader.trailingAnchor.constraint(equalTo: safeAreaMargins.trailingAnchor),
+            screenLoader.leadingAnchor.constraint(equalTo: safeAreaMargins.leadingAnchor),
+            screenLoader.topAnchor.constraint(equalTo: pokemonTableView.bottomAnchor, constant: -30),  
         ])
     }
 }

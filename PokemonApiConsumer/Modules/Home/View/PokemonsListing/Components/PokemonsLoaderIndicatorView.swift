@@ -46,10 +46,10 @@ class PokemonsLoaderIndicatorView: UIView {
         addSubview(loadingIndicator)
         
         NSLayoutConstraint.activate([
-            loadingIndicator.topAnchor.constraint(equalTo: topAnchor),
-            loadingIndicator.bottomAnchor.constraint(equalTo: bottomAnchor),
-            loadingIndicator.trailingAnchor.constraint(equalTo: trailingAnchor),
-            loadingIndicator.leadingAnchor.constraint(equalTo: leadingAnchor)
+            loadingIndicator.topAnchor.constraint(equalTo: self.topAnchor),
+            loadingIndicator.bottomAnchor.constraint(equalTo: self.bottomAnchor),
+            loadingIndicator.trailingAnchor.constraint(equalTo: self.trailingAnchor),
+            loadingIndicator.leadingAnchor.constraint(equalTo: self.leadingAnchor)
         ])
     }
 }

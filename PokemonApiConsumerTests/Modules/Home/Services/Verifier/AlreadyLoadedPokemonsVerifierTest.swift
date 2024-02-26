@@ -9,43 +9,32 @@ import XCTest
 @testable import PokemonApiConsumer
 
 final class AlreadyLoadedPokemonsVerifierTest: XCTestCase {
-    private let pokemonsViewModelList: [PokemonViewModel] = [
-        PokemonViewModel(id: "ap-1", imageData: Data()),
-        PokemonViewModel(id: "pk-2", imageData: Data()),
-        PokemonViewModel(id: "at-3", imageData: Data()),
-    ]
-    func test_isPokemonIsAlreadyRegistered_shouldNotifyPokemonIsRegistered_whenPokemonIsAlreadyRegistered() {
+    func testShouldNotifyPokemonIsAlreadyRegistered() {
+        let listOf_AlreadyExistingPokemons: [PokemonViewData] = [
+            PokemonViewData(id: "ap-1", name: "pokemon 1"),
+            PokemonViewData(id: "pk-2", name: "pokemon 2"),
+            PokemonViewData(id: "at-3", name: "pokemon 3"),
+        ]
+        let pokemonToInsert: PokemonDataModel.Pokemon = PokemonDataModel.Pokemon(id: "ap-1", name: "Ampharos")
+        let sut = AlreadyLoadedPokemonsVerifier()
         
+        let result: Bool = sut.isPokemonAlreadyRegistered(currentPokemon: pokemonToInsert, pokemonsList: listOf_AlreadyExistingPokemons)
+        
+        XCTAssertTrue(result)
     }
     
-    func testPokemonIsAlreadyRegistered() {
-        let currentPokemon: PokemonDataModel.Pokemon = PokemonDataModel.Pokemon(
-            id: "ap-1",
-            name: "Ampharos",
-            images: PokemonDataModel.ImagesStringUrl(small: "")
-        )
-        
-        let isRegistered = isPokemonAlreadyRegistered(currentPokemon: currentPokemon)
-        
-        XCTAssertTrue(isRegistered)
-    }
-    
-    func testPokemonIsNotRegisteredYet() {
-        let currentPokemon: PokemonDataModel.Pokemon = PokemonDataModel.Pokemon(id: "ch-1", name: "Charmander", images: PokemonDataModel.ImagesStringUrl(small: ""))
-        
-        let isRegistered = isPokemonAlreadyRegistered(currentPokemon: currentPokemon)
-        
-        XCTAssertFalse(isRegistered)
-    }
-    
-}
+    func testShouldNotifyPokemonIsNotRegisteredYet() {
+        let listOf_AlreadyExistingPokemons: [PokemonViewData] = [
+            PokemonViewData(id: "ap-1", name: "pokemon 1"),
+            PokemonViewData(id: "pk-2", name: "pokemon 2"),
+            PokemonViewData(id: "at-3", name: "pokemon 3"),
+        ]
+        let pokemonToInsert: PokemonDataModel.Pokemon = PokemonDataModel.Pokemon(id: "ch-1", name: "Charmander")
+        let sut = AlreadyLoadedPokemonsVerifier()
 
-extension AlreadyLoadedPokemonsVerifierTest {
-    private func isPokemonAlreadyRegistered(currentPokemon: PokemonDataModel.Pokemon) -> Bool {
-        let verifier = AlreadyLoadedPokemonsVerifier()
-        
-        let result: Bool = verifier.isPokemonIsAlreadyRegistered(currentPokemon: currentPokemon, pokemonsList: self.pokemonsViewModelList)
-        
-        return result
+
+        let result: Bool = sut.isPokemonAlreadyRegistered(currentPokemon: pokemonToInsert, pokemonsList: listOf_AlreadyExistingPokemons)
+
+        XCTAssertFalse(result)
     }
 }

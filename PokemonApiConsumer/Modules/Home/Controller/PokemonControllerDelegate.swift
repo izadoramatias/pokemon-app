@@ -8,6 +8,7 @@
 import UIKit
 
 protocol PokemonControllerDelegate: AnyObject {
-    func didGetPokemonsViewModelList(data: [PokemonViewModel])
+    func didGetPokemonsViewDataList(data: [PokemonViewData])
     func didEnterInLoading()
+    func didStopInError()
 }

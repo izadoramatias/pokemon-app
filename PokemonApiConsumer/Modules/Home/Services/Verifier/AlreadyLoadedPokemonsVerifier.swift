@@ -8,7 +8,7 @@
 import Foundation
 
 class AlreadyLoadedPokemonsVerifier {
-    public func isPokemonIsAlreadyRegistered(currentPokemon: PokemonDataModel.Pokemon, pokemonsList: [PokemonViewModel]) -> Bool {
+    public func isPokemonAlreadyRegistered(currentPokemon: PokemonDataModel.Pokemon, pokemonsList: [PokemonViewData]) -> Bool {
         var isPokemonAlreadyRegistered = false
 
         for pokemon in pokemonsList {
@@ -18,4 +18,5 @@ class AlreadyLoadedPokemonsVerifier {
             }
         }
         return isPokemonAlreadyRegistered
-    }}
+    }
+}

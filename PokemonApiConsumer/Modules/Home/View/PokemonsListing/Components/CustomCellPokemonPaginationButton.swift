@@ -40,12 +40,16 @@ class CustomCellPokemonPaginationButton: UITableViewCell {
 
     private func setConstraints() {
         contentView.addSubview(loadMoreItensButton)
-                
+
         NSLayoutConstraint.activate([
-            contentView.topAnchor.constraint(equalTo: loadMoreItensButton.topAnchor, constant: -15),
-            contentView.bottomAnchor.constraint(equalTo: loadMoreItensButton.bottomAnchor, constant: 15),
             loadMoreItensButton.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -30),
             loadMoreItensButton.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 30),
+//            loadMoreItensButton.topAnchor.constraint(equalTo: topAnchor, constant: 15),
+//            loadMoreItensButton.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -15),
+
+            contentView.topAnchor.constraint(equalTo: loadMoreItensButton.topAnchor, constant: -20),
+            contentView.bottomAnchor.constraint(equalTo: loadMoreItensButton.bottomAnchor, constant: 20),
         ])
     }
+
 }

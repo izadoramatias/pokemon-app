@@ -1,5 +1,5 @@
 //
-//  PokemonViewModel.swift
+//  PokemonViewData.swift
 //  PokemonApiConsumer
 //
 //  Created by Izadora Matias on 22/02/24.
@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct PokemonViewModel: Encodable {
+struct PokemonViewData: Encodable {
     var id: String
-    var imageData: Data
+    var name: String
 }

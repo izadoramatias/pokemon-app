@@ -9,35 +9,72 @@ import Foundation
 
 class PokemonController {
     public weak var delegate: PokemonControllerDelegate?
-    private let pokemonsDataModelListLoader = PokemonsDataModelListLoader(pokemonsRepository: PokemonsRepository())
-    private let pokemonsListsGenerator = PokemonsListsGenerator()
-    private var totalPokemons: Int = 0
-    private var totalPokemonsPerPage = 3
-    private var currentPokemonsList: [PokemonViewModel] = []
+    public weak var detailDelegate: DetailControllerDelegate?
+    private let pokemonsDataModelListLoader: PokemonsDataLoader
+    private let pokemonsFinder: PokemonsFinder
+    private let converter: PokemonDataConverter
     
-    private func getPokemonsUrl(completion: @escaping ([[String: Any]]) -> Void) {
-        pokemonsDataModelListLoader.loadPokemonsDataModelList(completion: { pokemonsDataModel in
-            let pokemonCollection = self.pokemonsListsGenerator.pokemonCollectionGenerate(pokemonsDataModel: pokemonsDataModel, currentListLoadedPokemons: self.currentPokemonsList)
-            
-            completion(pokemonCollection)
-        }, totalPokemonsPerPage: self.totalPokemonsPerPage, currentPage: self.offsetCalculate())
+    init(
+        delegate: PokemonControllerDelegate? = nil,
+        detailDelegate: DetailControllerDelegate? = nil,
+        pokemonsDataModelListLoader: PokemonsDataLoader = PokemonsDataLoader(),
+        pokemonsFinder: PokemonsFinder = PokemonsFinder(),
+        converter: PokemonDataConverter = PokemonDataConverter()
+    ) {
+        self.delegate = delegate
+        self.detailDelegate = detailDelegate
+        self.pokemonsDataModelListLoader = pokemonsDataModelListLoader
+        self.pokemonsFinder = pokemonsFinder
+        self.converter = converter
     }
-
-    public func loadPokemons() {
+    
+    private func getPokemonsViewDataList(currentPokemonsList: [PokemonViewData], totalPokemons: Int = 0, totalPokemonsPerPage: Int = 30, completion: @escaping ([PokemonViewData]?) -> Void) {
+            
+        pokemonsDataModelListLoader.loadPokemonsDataModelList(totalPokemonsPerPage: totalPokemonsPerPage, currentPage: self.offsetCalculate(totalPokemons: totalPokemons, totalPokemonsPerPage: totalPokemonsPerPage)) { pokemonsViewDataModelList in
+            
+            if let pokemonsViewDataModelList = pokemonsViewDataModelList {
+                completion(self.pokemonsFinder.findPokemonsNotRegisteredYed(pokemonDataModel: pokemonsViewDataModelList, currentPokemonList: currentPokemonsList))
+                return
+            }
+            completion(nil)
+        }
+    }
+    
+    public func loadPokemons(currentPokemonsList: [PokemonViewData]) {
         self.delegate?.didEnterInLoading()
         
-        self.getPokemonsUrl { pokemonCollection in
-            let pokemonsViewModelList = self.pokemonsListsGenerator.pokemonsViewModelGenerate(pokemonCollection: pokemonCollection)
+        self.getPokemonsViewDataList(currentPokemonsList: currentPokemonsList, totalPokemons: currentPokemonsList.count) { pokemonsViewDataList in
+            guard let pokemonsViewDataList = pokemonsViewDataList else {
+                self.delegate?.didStopInError()
+                return
+            }
 
-            self.delegate?.didGetPokemonsViewModelList(data: pokemonsViewModelList)
+            self.delegate?.didGetPokemonsViewDataList(data: pokemonsViewDataList)
+        }
+    }
+    
+    private func getCard(cardId: String, completion: @escaping (Data?) -> Void) -> Void {
+        self.pokemonsDataModelListLoader.loadPokemonCardModel(cardId: cardId) { pokemonCardModel in
+            let url = self.converter.convertToUrl(cardModel: pokemonCardModel)
+            let data = self.converter.convertToData(cardUrl: url)
+            
+            completion(data)
+        }
+    }
+    
+    public func loadCardImage(pokemonId: String) {
+        self.detailDelegate?.didEnterInLoadingCard()
+        
+        self.getCard(cardId: pokemonId) { data in
+            guard let cardData = data else {
+                self.delegate?.didStopInError()
+                return
+            }
+            self.detailDelegate?.didGetCardImage(data: cardData)
         }
     }
 
-    private func offsetCalculate() -> Int {
-        return (self.totalPokemons / self.totalPokemonsPerPage) + 1
-    }
-    
-    public func setTotalPokemons(totalPokemons: Int) {
-        self.totalPokemons = totalPokemons
+    private func offsetCalculate(totalPokemons: Int, totalPokemonsPerPage: Int) -> Int {
+        return (totalPokemons / totalPokemonsPerPage) + 1
     }
 }
