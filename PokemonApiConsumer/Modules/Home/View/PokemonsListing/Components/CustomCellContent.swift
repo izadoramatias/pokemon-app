@@ -23,6 +23,7 @@ class CustomCellContent: UITableViewCell {
     public let label: UILabel = {
         var label = UILabel()
         label.textColor = .black
+        label.font = .preferredFont(forTextStyle: .body)
         label.translatesAutoresizingMaskIntoConstraints = false
 
         return label

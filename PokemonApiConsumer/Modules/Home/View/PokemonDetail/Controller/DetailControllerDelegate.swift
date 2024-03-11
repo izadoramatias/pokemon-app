@@ -10,4 +10,5 @@ import Foundation
 protocol DetailControllerDelegate: AnyObject {
     func didGetCardImage(data: Data)
     func didEnterInLoadingCard()
+    func didStopInError()
 }

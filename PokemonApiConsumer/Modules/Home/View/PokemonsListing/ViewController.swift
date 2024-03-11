@@ -76,7 +76,7 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource {
             let id = self.pokemonsViewDataList[indexPath.row].id
             cell.label.text = "\(name) - \(id)"
             if ( indexPath.row % 2 == 0 ) {
-                cell.backgroundColor = UIColor(red: 232/255, green: 232/255, blue: 232/255, alpha: 0.8)
+                cell.backgroundColor = UIColor(red: 254/255, green: 251/255, blue: 240/255, alpha: 0.4)
             }
             else {
                cell.backgroundColor = .white
@@ -102,14 +102,13 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource {
 
 extension ViewController: PokemonControllerDelegate {
     func didStopInError() {
-        self.showMessage()
+        self.showErrorMessage()
         DispatchQueue.main.async {
             self.pokemonsListingContentView.screenLoader.loadingIndicator.stopAnimating()
         }
     }
     
     func didEnterInLoading() {
-        self.hideButton()
         self.pokemonsListingContentView.screenLoader.loadingIndicator.startAnimating()
     }
 
@@ -122,7 +121,6 @@ extension ViewController: PokemonControllerDelegate {
 
         self.pokemonsViewDataList.append(contentsOf: data)
         
-        self.showButton()
         DispatchQueue.main.async {
             self.pokemonsListingContentView.pokemonTableView.tableView.reloadData()
         }
@@ -147,21 +145,7 @@ extension ViewController {
         return pokemonImage
     }
     
-    private func hideButton() {
-        DispatchQueue.main.async {
-            let buttonCell = self.pokemonsListingContentView.pokemonTableView.tableView.cellForRow(at: IndexPath(row: self.pokemonsViewDataList.count, section: 0))
-            buttonCell?.isHidden = true
-        }
-    }
-    
-    private func showButton() {
-        DispatchQueue.main.async {
-            let buttonCell = self.pokemonsListingContentView.pokemonTableView.tableView.cellForRow(at: IndexPath(row: self.pokemonsViewDataList.count, section: 0))
-            buttonCell?.isHidden = false
-        }
-    }
-    
-    private func showMessage() {
-        print("aqui")
+    private func showErrorMessage() {
+        print("Não foi possível carregar a listagem")
     }
 }

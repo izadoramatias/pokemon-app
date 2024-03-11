@@ -37,6 +37,14 @@ final class PokemonControllerTest: XCTestCase {
         XCTAssertEqual(1, pokemonControllerDelegateMock.countOf_didGetPokemonsViewDataList)
     }
     
+    func testShouldCallDidStopInErrorOnceWhenLoadingPokemonsIsInvalid() {
+        pokemonsDataLoaderMock.resultOf_LoadPokemonsDataModelList = nil
+        
+        sut.loadPokemons(currentPokemonsList: [PokemonViewData]())
+        
+        XCTAssertEqual(1, pokemonControllerDelegateMock.countOf_didStopInError)
+    }
+    
     // MARK: Tests of loadCardImage
     func testShouldCallDidEnterInLoadingCardOnceWhenLoadingCard() {
         sut.loadCardImage(pokemonId: "")
@@ -50,13 +58,11 @@ final class PokemonControllerTest: XCTestCase {
         XCTAssertEqual(1, detailControllerDelegateMock.countOf_didGetCardImage)
     }
     
-    // MARK: Tests of both
-    func testShouldCallDidStopInErrorTwice() {
+    func testShouldCallDidStopInErrorOnceWhenLoadingCardIsInvalid() {
         pokemonsDataLoaderMock.resultOf_LoadPokemonCardModel = nil
-        pokemonsDataLoaderMock.resultOf_LoadPokemonsDataModelList = nil
         
-        sut.loadPokemons(currentPokemonsList: [PokemonViewData]())
         sut.loadCardImage(pokemonId: "")
-        XCTAssertEqual(2, pokemonControllerDelegateMock.countOf_didStopInError)
+        
+        XCTAssertEqual(1, detailControllerDelegateMock.countOf_didStopInError)
     }
 }

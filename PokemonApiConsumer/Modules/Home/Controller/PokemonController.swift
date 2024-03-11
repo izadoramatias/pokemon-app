@@ -67,7 +67,7 @@ class PokemonController {
         
         self.getCard(cardId: pokemonId) { data in
             guard let cardData = data else {
-                self.delegate?.didStopInError()
+                self.detailDelegate?.didStopInError()
                 return
             }
             self.detailDelegate?.didGetCardImage(data: cardData)
