@@ -22,7 +22,6 @@ class PokemonsTableView: UIView {
         let tableView = UITableView()
         tableView.backgroundColor = .systemBackground
         tableView.allowsSelection = true
-        tableView.register(UITableViewCell.self, forCellReuseIdentifier: "Cell")
         tableView.translatesAutoresizingMaskIntoConstraints = false
                 
         return tableView

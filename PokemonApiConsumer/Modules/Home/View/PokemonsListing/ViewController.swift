@@ -29,9 +29,7 @@ class ViewController: UIViewController {
         self.detailVC.presentationDelegate = self
         self.pokemonsListingContentView.pokemonTableView.tableView.delegate = self
         self.pokemonsListingContentView.pokemonTableView.tableView.dataSource = self
-        self.pokemonsListingContentView.pokemonTableView.tableView.register(CustomCellPokemonPaginationButton.self, forCellReuseIdentifier: "pokemonPaginationButton")
         self.pokemonsListingContentView.pokemonTableView.tableView.register(CustomCellContent.self, forCellReuseIdentifier: "customCellContent")
-        self.pokemonsListingContentView.pokemonTableView.tableView.register(UITableViewCell.self, forCellReuseIdentifier: "cell")
 
         self.pokemonController.loadPokemons(currentPokemonsList: self.pokemonsViewDataList)
     }
