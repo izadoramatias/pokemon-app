@@ -7,10 +7,10 @@
 
 import UIKit
 
-class PokemonsTableView: UIView {
+class PokemonsTableView: UITableView {
     
-    override init(frame: CGRect) {
-        super.init(frame: frame)
+    override init(frame: CGRect, style: UITableView.Style) {
+        super.init(frame: frame, style: style)
         setConfiguration()
     }
     
@@ -18,28 +18,14 @@ class PokemonsTableView: UIView {
         super.init(coder: coder)
     }
     
-    public let tableView: UITableView = {
-        let tableView = UITableView()
-        tableView.backgroundColor = .systemBackground
-        tableView.allowsSelection = true
-        tableView.translatesAutoresizingMaskIntoConstraints = false
-                
-        return tableView
-    }()
-    
     public func setConfiguration() {
-        self.setConstrainst()
+        self.setProperties()
     }
-
-    private func setConstrainst() {
-        addSubview(tableView)
-                
-        NSLayoutConstraint.activate([
-            tableView.topAnchor.constraint(equalTo: topAnchor),
-            tableView.bottomAnchor.constraint(equalTo: bottomAnchor),
-            tableView.leadingAnchor.constraint(equalTo: leadingAnchor),
-            tableView.trailingAnchor.constraint(equalTo: trailingAnchor),
-        ])
+    
+    private func setProperties() {
+        self.backgroundColor = .systemBackground
+        self.accessibilityIdentifier = "tableView"
+        self.allowsSelection = true
     }
 }
 

@@ -8,7 +8,6 @@
 import UIKit
 
 class ViewController: UIViewController {
-    
     var pokemonController = PokemonController()
     var pokemonsViewDataList = [PokemonViewData]()
     let pokemonsListingContentView: PokemonsListingContentView = {
@@ -18,7 +17,7 @@ class ViewController: UIViewController {
         return contentView
     }()
     let detailVC = DetailViewController()
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         self.view.backgroundColor = .systemBackground
@@ -27,9 +26,9 @@ class ViewController: UIViewController {
         self.pokemonController.delegate = self
         self.pokemonController.detailDelegate = detailVC
         self.detailVC.presentationDelegate = self
-        self.pokemonsListingContentView.pokemonTableView.tableView.delegate = self
-        self.pokemonsListingContentView.pokemonTableView.tableView.dataSource = self
-        self.pokemonsListingContentView.pokemonTableView.tableView.register(CustomCellContent.self, forCellReuseIdentifier: "customCellContent")
+        self.pokemonsListingContentView.pokemonTableView.delegate = self
+        self.pokemonsListingContentView.pokemonTableView.dataSource = self
+        self.pokemonsListingContentView.pokemonTableView.register(CustomCellContent.self, forCellReuseIdentifier: "customCellContent")
 
         self.pokemonController.loadPokemons(currentPokemonsList: self.pokemonsViewDataList)
     }
@@ -85,13 +84,8 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let isLastItem = (self.pokemonsViewDataList.count != 0 && indexPath.row == self.pokemonsViewDataList.count)
-        
-        if ( isLastItem ) {
-            return
-        }
-        
         let cardId = self.pokemonsViewDataList[indexPath.row].id
+        
         self.pokemonController.loadCardImage(pokemonId: cardId)
         self.detailVC.pokemonViewData = self.pokemonsViewDataList[indexPath.row]
         self.navigationController?.present(detailVC, animated: true)
@@ -120,7 +114,7 @@ extension ViewController: PokemonControllerDelegate {
         self.pokemonsViewDataList.append(contentsOf: data)
         
         DispatchQueue.main.async {
-            self.pokemonsListingContentView.pokemonTableView.tableView.reloadData()
+            self.pokemonsListingContentView.pokemonTableView.reloadData()
         }
     }
 }
@@ -128,12 +122,6 @@ extension ViewController: PokemonControllerDelegate {
 extension ViewController: PresentationDelegate {
     func didDismissDetailView() {
         self.navigationController?.dismiss(animated: true)
-    }
-}
-
-extension ViewController {
-    @objc func loadPokemons() {
-        self.pokemonController.loadPokemons(currentPokemonsList: self.pokemonsViewDataList)
     }
 }
 
